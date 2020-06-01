@@ -31,7 +31,6 @@ async def on_ready():
     print(client4.user.name)
     print(client4.user.id)
     print('------')
-    await client3.change_presence(activity=discord.Game(name='監視中'))
     loop99.start()
     loop98.start()
     CHANNEL_ID = 713273848124014592
@@ -39,6 +38,8 @@ async def on_ready():
     await channel.send("再起動成功")
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
+    await client3.change_presence(activity=discord.Game(name='監視中'))
+    await client4.change_presence(activity=discord.Game(name='オークションなし'))
 
 @client1.event
 async def on_message(message):#考えろ
@@ -96,7 +97,6 @@ async def on_message(message):#考えろ
 
 @client2.event
 async def on_message(message):
-    global setidseichi
     mc=str(message.content)#内容保存
     mn=str(message.author.name)#名前保存
     cid=int(message.channel.id)#チャンネルＩＤ保存
@@ -263,7 +263,7 @@ async def on_message(message):
     mn=str(message.author.name)#名前保存
     buydata=mc.split("!")#!で分ける
     cid=int(message.channel.id)#チャンネルＩＤ保存
-    if cid==700124730811744316 or cid == 698533705614098463:#チャンネル
+    if cid==712572591864283217:#チャンネル
         if message.author.bot:#botはじいてる
             return
         await message.delete()
@@ -329,14 +329,10 @@ async def on_message(message):
                 embed=discord.Embed(title="オークション終了しねぇよ", description="ばかめ", color=0xff0000)
                 embed.add_field(name="値段", value=int(gendaiti), inline=False)
                 await message.channel.send(embed=embed)#送信
-#Copyright (c) 2020 disneyresidents
-#Released under the MIT license
-#https://opensource.org/licenses/mit-license.php
-#これでいいんか?@2レジ
+#よくわからんけど2レジありがとう
 @tasks.loop(seconds=10)
 async def loop99():
     now = datetime.datetime.now().strftime("%H:%M")
-    weekday = datetime.datetime.now().weekday()
     if now == "23:58":
         mcid_uuid_dic = {
             "nekorobi_0": "d6be1561-47c1-4e67-9829-2aca48f9be39",
@@ -359,6 +355,7 @@ async def loop99():
                 CHANNEL_ID = 707959412664303616
                 channel = client2.get_channel(CHANNEL_ID)
                 await channel.send(msg)
+#2レジありがとう
 @tasks.loop(seconds=60)
 async def loop98():
     now = datetime.datetime.now().strftime("%H:%M")
