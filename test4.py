@@ -95,7 +95,7 @@ async def on_message(message):#考えろ
             # メッセージを埋め込み形式で転送
             await channel.send(embed=embed)
 
-@client2.event
+@client2.event#おめが
 async def on_message(message):
     mc=str(message.content)#内容保存
     mn=str(message.author.name)#名前保存
@@ -195,7 +195,7 @@ async def on_message(message):
             if kaisuu == 6:
                 await message.channel.send(msg)
 
-@client3.event
+@client3.event#ばいばい
 async def on_message(message):
     buydata=[]
     mc=str(message.content)#内容保存
@@ -256,7 +256,7 @@ async def on_message(message):
         embed.add_field(name="やりたいこと", value="計算機能強化", inline=True)
         embed.set_footer(text="+不要")
         await message.channel.send(embed=embed)#送信
-@client4.event
+@client4.event#おく
 async def on_message(message):
     buydata=[]
     mc=str(message.content)#内容保存
@@ -330,6 +330,9 @@ async def on_message(message):
                 embed.add_field(name="値段", value=int(gendaiti), inline=False)
                 await message.channel.send(embed=embed)#送信
 #よくわからんけど2レジありがとう
+#Copyright (c) 2020 disneyresidents
+#Released under the MIT license
+#https://opensource.org/licenses/mit-license.php
 @tasks.loop(seconds=10)
 async def loop99():
     now = datetime.datetime.now().strftime("%H:%M")
@@ -366,7 +369,7 @@ async def loop98():
 #token
 with open('token.json') as f:
     token = json.load(f)
-#keiさんありがとう
+#keiさんありがとう...
 discord_bot_token_1 = token["client1"]
 discord_bot_token_2 = token["client2"]
 discord_bot_token_3 = token["client3"]
