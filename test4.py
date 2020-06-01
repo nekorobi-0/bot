@@ -329,7 +329,10 @@ async def on_message(message):
                 embed=discord.Embed(title="オークション終了しねぇよ", description="ばかめ", color=0xff0000)
                 embed.add_field(name="値段", value=int(gendaiti), inline=False)
                 await message.channel.send(embed=embed)#送信
-
+#Copyright (c) 2020 disneyresidents
+#Released under the MIT license
+#https://opensource.org/licenses/mit-license.php
+#これでいいんか?@2レジ
 @tasks.loop(seconds=10)
 async def loop99():
     now = datetime.datetime.now().strftime("%H:%M")
