@@ -1,4 +1,4 @@
-import discord,requests,re,bs4,datetime,time,asyncio,json
+import discord,requests,re,bs4,datetime,time,asyncio,json,random
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 client1 = discord.Client()
@@ -47,7 +47,7 @@ async def on_message(message):#考えろ
         # もし、送信者がbotなら無視する
         return
     GLOBAL_CH_NAME = "global_chat" # グローバルチャットのチャンネル名
-
+    #ここから
     if message.channel.name == GLOBAL_CH_NAME:
         # hoge-globalの名前をもつチャンネルに投稿されたので、メッセージを転送する
 
@@ -94,6 +94,30 @@ async def on_message(message):#考えろ
         for channel in global_channels:
             # メッセージを埋め込み形式で転送
             await channel.send(embed=embed)
+    #ここまでグローバル
+    #ここからログぼ
+    if message.channel.id == 717278803893813329:
+        pt1 = random.randint(0,10)
+        msg = f"{pt1}ptげっと\n"
+        with open('pt.json') as f:
+            pt = json.load(f)
+        try:
+            old = int(pt[message.author.id])
+            msg += str(old) + "pt->"
+            pt.pop(message.author.id)
+            pt.pop(message.author.id)
+            pt[int(message.author.id)] = pt1 + old
+        except:
+            pt[int(message.author.id)] = pt1
+        msg += str(pt[message.author.id]) + "pt"
+        with open('pt.json', 'w') as f:
+            json.dump(pt, f, indent=2, ensure_ascii=False)
+        await message.channel.send(msg)
+        #これでうごくよな？
+    if message.content == "/pt":
+        with open('pt.json') as f:
+            pt = json.load(f)
+        await message.channel.send(f"{pt[message.author.id]}pt")
 
 @client2.event#おめが
 async def on_message(message):
