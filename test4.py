@@ -333,7 +333,7 @@ async def on_message(message):
 #Copyright (c) 2020 disneyresidents
 #Released under the MIT license
 #https://opensource.org/licenses/mit-license.php
-@tasks.loop(seconds=10)
+@tasks.loop(seconds=60)
 async def loop99():
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:58":
