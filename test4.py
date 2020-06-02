@@ -345,7 +345,7 @@ async def loop99():
             "Arwing_1224": "20fd72b0-4835-4504-87e7-f1cb34b84447",
             "ENS_ATF": "b2100f40-b3a4-486a-b4e0-048fd64144af"
         }
-        msg = ""
+        msg = "<@707444280121360464>発表時間です\n"
         kaisuu = 0
         for mcid in mcid_uuid_dic.keys():
             uuid = mcid_uuid_dic[mcid]
