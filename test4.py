@@ -13,6 +13,8 @@ gendaiti = 0
 k4 = 0
 omn = "なし"
 omn2 = "なし"
+with open('uuid.json') as f:
+    uuid = json.load(f)
 @client1.event
 async def on_ready():
     print('Logged in as')
@@ -121,6 +123,7 @@ async def on_message(message):#考えろ
 
 @client2.event#おめが
 async def on_message(message):
+    global uuid
     mc=str(message.content)#内容保存
     mn=str(message.author.name)#名前保存
     cid=int(message.channel.id)#チャンネルＩＤ保存
@@ -145,7 +148,7 @@ async def on_message(message):
             soup = bs4.BeautifulSoup(res.text, "html.parser")
             td = soup.td
             if not f'{mcid}' in f'{td}':
-                await message.channel.send("整地鯖にログインしたことのないMCIDです。")
+                await message.channel.send("整地鯖にログインしたことのないMCIDです。\n必ず小文字で入力してください")
                 return
             last_login = soup.select('td')[1]
             await message.channel.send("整地鯖に入ったことがあるね!")
@@ -170,7 +173,7 @@ async def on_message(message):
         mcid = mc
         p = re.compile(r"^[a-zA-Z0-9_]+$")
         if not p.fullmatch(mcid):
-            await message.channel.send("MCIDに使えない文字が含まれています。\n小文字で入力するといいかも?")
+            await message.channel.send("MCIDに使えない文字が含まれています。")
             return
         if len(mcid) < 3:
             await message.channel.send("短すぎます！")
@@ -185,7 +188,7 @@ async def on_message(message):
             soup = bs4.BeautifulSoup(res.text, "html.parser")
             td = soup.td
             if not f'{mcid}' in f'{td}':
-                await message.channel.send("整地鯖にログインしたことのないMCIDです。")
+                await message.channel.send("整地鯖にログインしたことのないMCIDです。\n必ず小文字で入力してください")
                 return
             last_login = soup.select('td')[1]
             print(str(last_login)+"\n-----_")#エラー防止
@@ -199,14 +202,7 @@ async def on_message(message):
         except requests.exceptions.HTTPError:
             await message.channel.send(f'requests.exceptions.HTTPError')
     if mc == "/seichi":
-        mcid_uuid_dic = {
-            "nekorobi_0": "d6be1561-47c1-4e67-9829-2aca48f9be39",
-            "wanwanwan_o": "bab130b9-2247-4b18-967a-0867edcccf69",
-            "NaCl2375": "9c565f26-ea8d-4c03-9731-1c89282ab2b9",
-            "Moti_Yonko": "fdd25f48-395d-482d-aefc-345aa354c83a",
-            "Arwing_1224": "20fd72b0-4835-4504-87e7-f1cb34b84447",
-            "ENS_ATF": "b2100f40-b3a4-486a-b4e0-048fd64144af"
-        }
+        mcid_uuid_dic = uuid
         msg = ""
         kaisuu = 0
         for mcid in mcid_uuid_dic.keys():
@@ -232,8 +228,8 @@ async def on_message(message):
             await message.delete()
             if message.author.bot:
                 return
-            speak = buydata[1]+"を"+mn+"が"+buydata[2]+"買った！"#話す内容保存
-            await message.channel.send(speak)#送信
+                speak = buydata[1]+"を"+mn+"が"+buydata[2]+"買った！"#話す内容保存
+                await message.channel.send(speak)#送信
     if buydata[0]=="s":#売りか
         if cid==699804347403468801 or cid == 698735320870420520:#チャンネルはあってるか
             await message.delete()
@@ -359,16 +355,10 @@ async def on_message(message):
 #https://opensource.org/licenses/mit-license.php
 @tasks.loop(seconds=60)
 async def loop99():
+    global uuid
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:58":
-        mcid_uuid_dic = {
-            "nekorobi_0": "d6be1561-47c1-4e67-9829-2aca48f9be39",
-            "wanwanwan_o": "bab130b9-2247-4b18-967a-0867edcccf69",
-            "NaCl2375": "9c565f26-ea8d-4c03-9731-1c89282ab2b9",
-            "Moti_Yonko": "fdd25f48-395d-482d-aefc-345aa354c83a",
-            "Arwing_1224": "20fd72b0-4835-4504-87e7-f1cb34b84447",
-            "ENS_ATF": "b2100f40-b3a4-486a-b4e0-048fd64144af"
-        }
+        mcid_uuid_dic = uuid
         msg = "<@707444280121360464>発表時間です\n"
         kaisuu = 0
         for mcid in mcid_uuid_dic.keys():
