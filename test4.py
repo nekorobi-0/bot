@@ -212,7 +212,7 @@ async def on_message(message):
             data = data_json[0]["data"]["raw_data"]
             msg += f"{mcid}の整地量>>>{data}\n"
             kaisuu += 1
-            if kaisuu == 6:
+            if kaisuu == 7:
                 await message.channel.send(msg)
 
 @client3.event#ばいばい
@@ -368,7 +368,7 @@ async def loop99():
             data = data_json[0]["data"]["raw_data"]
             msg += f"{mcid}の整地量>>>{data}\n"
             kaisuu += 1
-            if kaisuu == 6:
+            if kaisuu == 7:
                 CHANNEL_ID = 707959412664303616
                 channel = client2.get_channel(CHANNEL_ID)
                 await channel.send(msg)
