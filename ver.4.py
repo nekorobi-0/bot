@@ -13,6 +13,9 @@ k4 = 0
 omn = "なし"
 omn2 = "なし"
 start1 = False
+start2 = False
+start3 = False
+start4 = False
 with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
@@ -215,6 +218,11 @@ async def on_message(message):
     global delate_message1
     global add_message_channel_id
     global start1
+    global start2
+    global start3
+    global start4
+    if message.author.bot:
+        return
     if message.channel.category_id == 721478471712374811:
         if client3.user in message.mentions:
             if start1 == False:
@@ -222,24 +230,29 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 add_message_channel_id = message.channel.id
                 start1 = True
-        if message.content == "yes" and start1 == True:
+        elif message.content == "yes" and start1 == True:
             embed = discord.Embed(title="出品物を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
+            start1 = False
             start2 = True
             return
         elif message.content == "no" and start1 == True:
             await message.channel.send("キャンセルしました\n------------------------")
-        if  start2 == True:
+            start1 = False
+        elif  start2 == True:
             syuppin_butu = message.content
             embed = discord.Embed(title="開始額を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
+            start2 = False
+            print(start2)
             start3 = True
             return
-        if  start3 == True:
+        elif  start3 == True:
             syuppin_butu = message.content
             embed = discord.Embed(title="即決額を書いてください", description="なしの場合は**no**と書いてください", color=0xff0000)
             await message.channel.send(embed=embed)
             start4 = True
+            start3 = False
             return
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
