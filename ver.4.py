@@ -4,18 +4,15 @@ from discord.ext import tasks
 client1 = discord.Client()
 client2 = discord.Client()
 client3 = discord.Client()
-first = True
-sokketu = 0
-nedann2 = 0
-itemname="なし!"
-gendaiti = 0
-k4 = 0
-omn = "なし"
-omn2 = "なし"
 start1 = False
 start2 = False
 start3 = False
 start4 = False
+start5 = False
+syuppin_butu = ""
+kaishi_gaku = 0
+sokketu_gaku = 0
+iitai_koto = 0
 with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
@@ -215,12 +212,15 @@ async def on_message(message):
 
 @client3.event#ばいばい
 async def on_message(message):
-    global delate_message1
-    global add_message_channel_id
     global start1
     global start2
     global start3
     global start4
+    global start5
+    global iitai_koto
+    global syuppin_butu
+    global kaishi_gaku
+    global sokketu_gaku
     if message.author.bot:
         return
     if message.channel.category_id == 721478471712374811:
@@ -228,9 +228,13 @@ async def on_message(message):
             if start1 == False:
                 embed=discord.Embed(title="オークションを開始しますか？", description="**yes**で開始\n**no**でキャンセルします\n**必ず小文字で入力してください**", color=0xff0000)
                 await message.channel.send(embed=embed)
-                add_message_channel_id = message.channel.id
                 start1 = True
         elif message.content == "yes" and start1 == True:
+            start1 = False
+            start2 = False
+            start3 = False
+            start4 = False
+            start5 = False
             embed = discord.Embed(title="出品物を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
             start1 = False
@@ -244,16 +248,55 @@ async def on_message(message):
             embed = discord.Embed(title="開始額を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
             start2 = False
-            print(start2)
             start3 = True
             return
         elif  start3 == True:
-            syuppin_butu = message.content
-            embed = discord.Embed(title="即決額を書いてください", description="なしの場合は**no**と書いてください", color=0xff0000)
-            await message.channel.send(embed=embed)
-            start4 = True
-            start3 = False
+            try:
+                kaishi_gaku = int(message.content)
+                embed = discord.Embed(title="即決額を書いてください", description="なしの場合は**no**と書いてください", color=0xff0000)
+                await message.channel.send(embed=embed)
+                start4 = True
+                start3 = False
+            except:
+                await message.channel.send("整数で入力して下さい\nリセットします")
+                start1 = False
+                start2 = False
+                start3 = False
+                start4 = False
+                start5 = False
             return
+        elif start4 == True:
+            embed = discord.Embed(title="その他言いたいことなど", description="ない場合はなしで", color=0xff0000)
+            await message.channel.send(embed=embed)
+            if message.content == "no":
+                sokketu =False
+            else:
+                try:
+                    sokketu_gaku = int(message.content)
+                    sokketu =True
+                except:
+                    await message.channel.send("整数で入力して下さい\nリセットします")
+                    start1 = False
+                    start2 = False
+                    start3 = False
+                    start4 = False
+                    start5 = False
+            start4 = False
+            start5 = True
+            return
+        elif start5 == True:
+            iitai_koto = message.content
+            embed = discord.Embed(title="この内容でいいですか？", description="いいなら**yes**を\nダメなら**no**を", color=0xff0000)
+            embed.add_field(name="出品物", value=syuppin_butu, inline=True)
+            embed.add_field(name="開始額", value=kaishi_gaku, inline=True)
+            embed.add_field(name="即決額", value=sokketu_gaku, inline=True)
+            embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
+            await message.channel.send(embed=embed)
+            iitai_koto = message.content
+            start4 = False
+            start5 = True
+            return
+        
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
 #Released under the MIT license
