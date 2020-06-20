@@ -9,10 +9,11 @@ start2 = False
 start3 = False
 start4 = False
 start5 = False
+start6 = False
 syuppin_butu = ""
 kaishi_gaku = 0
 sokketu_gaku = 0
-iitai_koto = 0
+iitai_koto = ""
 with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
@@ -217,13 +218,14 @@ async def on_message(message):
     global start3
     global start4
     global start5
+    global start6
     global iitai_koto
     global syuppin_butu
     global kaishi_gaku
     global sokketu_gaku
     if message.author.bot:
         return
-    if message.channel.category_id == 721478471712374811:
+    if message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
         if client3.user in message.mentions:
             if start1 == False:
                 embed=discord.Embed(title="オークションを開始しますか？", description="**yes**で開始\n**no**でキャンセルします\n**必ず小文字で入力してください**", color=0xff0000)
@@ -269,7 +271,7 @@ async def on_message(message):
             embed = discord.Embed(title="その他言いたいことなど", description="ない場合はなしで", color=0xff0000)
             await message.channel.send(embed=embed)
             if message.content == "no":
-                sokketu =False
+                sokketu = False
             else:
                 try:
                     sokketu_gaku = int(message.content)
@@ -293,9 +295,30 @@ async def on_message(message):
             embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
             await message.channel.send(embed=embed)
             iitai_koto = message.content
-            start4 = False
-            start5 = True
+            start6 = True
+            start5 = False
             return
+        elif message.content == "yes" and start6 == True:
+            start1 = False
+            start2 = False
+            start3 = False
+            start4 = False
+            start5 = False
+            category_id = message.channel.category_id
+            category = message.guild.get_channel(category_id)
+            new_channel = await category.create_text_channel(name=syuppin_butu)
+            embed = discord.Embed(title="オークションが始まりました", description="", color=0xff0000)
+            embed.add_field(name="出品物", value=syuppin_butu, inline=True)
+            embed.add_field(name="開始額", value=kaishi_gaku, inline=True)
+            embed.add_field(name="即決額", value=sokketu_gaku, inline=True)
+            embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
+            embed.set_author(name=message.author.display_name, 
+                icon_url=message.author.avatar_url_as(format="png"))
+            await new_channel.send(embed=embed)
+            return
+        elif message.content == "no" and start1 == True:
+            await message.channel.send("キャンセルしました\n------------------------")
+            start1 = False
         
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
