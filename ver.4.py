@@ -304,6 +304,7 @@ async def on_message(message):
             start3 = False
             start4 = False
             start5 = False
+            await message.channel.purge()
             category_id = message.channel.category_id
             category = message.guild.get_channel(category_id)
             new_channel = await category.create_text_channel(name=syuppin_butu)
@@ -319,6 +320,12 @@ async def on_message(message):
         elif message.content == "no" and start1 == True:
             await message.channel.send("キャンセルしました\n------------------------")
             start1 = False
+    elif message.channel.category_id == 721478471712374811:
+        if message.content == "/del":
+            if message.author.guild_permissions.administrator:
+                await message.channel.delete()
+            else:
+                await message.channel.send('お前にはできない.')
         
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
