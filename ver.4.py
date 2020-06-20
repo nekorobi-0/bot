@@ -10,10 +10,13 @@ start3 = False
 start4 = False
 start5 = False
 start6 = False
+start7 = False
 syuppin_butu = ""
 kaishi_gaku = 0
 sokketu_gaku = 0
 iitai_koto = ""
+syuppin_sya = ""
+tanni = ""
 with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
@@ -219,13 +222,18 @@ async def on_message(message):
     global start4
     global start5
     global start6
+    global start7
     global iitai_koto
     global syuppin_butu
     global kaishi_gaku
     global sokketu_gaku
+    global syuppin_sya
+    global tanni
     if message.author.bot:
         return
-    if message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
+    if message.channel.id == 723872932488675425:
+        pass
+    elif message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
         if client3.user in message.mentions:
             if start1 == False:
                 embed=discord.Embed(title="オークションを開始しますか？", description="**yes**で開始\n**no**でキャンセルします\n**必ず小文字で入力してください**", color=0xff0000)
@@ -271,7 +279,7 @@ async def on_message(message):
             embed = discord.Embed(title="その他言いたいことなど", description="ない場合はなしで", color=0xff0000)
             await message.channel.send(embed=embed)
             if message.content == "no":
-                sokketu = False
+                sokketu_gaku = "none"
             else:
                 try:
                     sokketu_gaku = int(message.content)
@@ -288,22 +296,31 @@ async def on_message(message):
             return
         elif start5 == True:
             iitai_koto = message.content
+            embed = discord.Embed(title="単位を書いてください", description="椎名、ガチャ券など", color=0xff0000)
+            await message.channel.send(embed=embed)
+            start6 = True
+            start5 = False
+        elif start6 == True:
+            tanni = message.content
             embed = discord.Embed(title="この内容でいいですか？", description="いいなら**yes**を\nダメなら**no**を", color=0xff0000)
             embed.add_field(name="出品物", value=syuppin_butu, inline=True)
             embed.add_field(name="開始額", value=kaishi_gaku, inline=True)
             embed.add_field(name="即決額", value=sokketu_gaku, inline=True)
+            embed.add_field(name="単位", value=tanni, inline=True)
             embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
             await message.channel.send(embed=embed)
-            iitai_koto = message.content
-            start6 = True
-            start5 = False
+            start7 = True
+            start6 = False
             return
-        elif message.content == "yes" and start6 == True:
+        elif message.content == "yes" and start7 == True:
             start1 = False
             start2 = False
             start3 = False
             start4 = False
             start5 = False
+            start6 = False
+            start7 = False
+            syuppin_sya = message.author.id
             await message.channel.purge()
             category_id = message.channel.category_id
             category = message.guild.get_channel(category_id)
@@ -312,21 +329,54 @@ async def on_message(message):
             embed.add_field(name="出品物", value=syuppin_butu, inline=True)
             embed.add_field(name="開始額", value=kaishi_gaku, inline=True)
             embed.add_field(name="即決額", value=sokketu_gaku, inline=True)
+            embed.add_field(name="単位", value=tanni, inline=True)
             embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
             embed.set_author(name=message.author.display_name, 
                 icon_url=message.author.avatar_url_as(format="png"))
             await new_channel.send(embed=embed)
+            await new_channel.edit(topic=f"{syuppin_butu},{kaishi_gaku},{sokketu_gaku},{syuppin_sya},{tanni},,なし,未入札")
             return
-        elif message.content == "no" and start1 == True:
+        elif message.content == "no" and start6 == True:
             await message.channel.send("キャンセルしました\n------------------------")
             start1 = False
+            start2 = False
+            start3 = False
+            start4 = False
+            start5 = False
+            start6 = False
+            start7 = False
     elif message.channel.category_id == 721478471712374811:
         if message.content == "/del":
             if message.author.guild_permissions.administrator:
                 await message.channel.delete()
             else:
-                await message.channel.send('お前にはできない.')
-        
+                await message.channel.send('お前にはできない。')
+        elif message.content == "/end":
+            topic_list=message.channel.topic.split(",")
+            if int(topic_list[3]) == message.author.id:
+                channel = client3.get_channel(723872932488675425)
+                embed = discord.Embed(title="オークションが終了しました", description="", color=0xff0000)
+                embed.add_field(name="出品物", value=topic_list[0], inline=True)
+                embed.add_field(name="落札者", value=topic_list[6], inline=True)
+                embed.add_field(name="落札額", value=topic_list[7], inline=True)
+                embed.add_field(name="単位", value=topic_list[4], inline=True)
+                embed.set_author(name=message.author.display_name, 
+                    icon_url=message.author.avatar_url_as(format="png"))
+                await channel.send(embed=embed)
+                await message.channel.delete()
+            else:
+                await message.channel.send('お前にはできない。')
+        else:
+            try:
+                embed = discord.Embed(title="入札", description=int(message.content), color=0xff0000)
+                embed.set_author(name=message.author.display_name, 
+                    icon_url=message.author.avatar_url_as(format="png"))
+                topic_list=message.channel.topic.split(",,")
+                await message.delete()
+                await message.channel.send(embed=embed)
+                await message.channel.edit(topic=f"{topic_list[0]},,{message.author.name},{message.content}")
+            except:
+                pass
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
 #Released under the MIT license
