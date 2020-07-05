@@ -17,6 +17,44 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
+#ログインボーナス
+def txtread(setid):
+    ints = 0
+    path = "datas.txt"
+    with open(path) as f:
+        dataaa = f.readlines()
+        idid = int("0")
+    try:
+        while idid != setid:
+            text2=[]
+            text = dataaa[ints]
+            text2=text.split("!")
+            text3 = text2[0].split("\n")
+            idid = int(text3[0])
+            ints = ints + 1
+    except:
+        myset(setid)
+        return txtread(setid)
+    return int(text2[1])
+def moneyadd(setid,moneyadd):
+    money = txtread(setid)
+    setmoney= int(money) + int(moneyadd)
+    newdata =str(setid) + "!" + str(setmoney)
+    olddata = str(setid) + "!" + str(money)
+    file_name = "datas.txt"
+    with open(file_name, encoding="cp932") as f:
+        data_lines = f.read()
+    data_lines = data_lines.replace(olddata,newdata)
+    with open(file_name, mode="w", encoding="cp932") as f:
+        f.write(data_lines)
+def myset(id):
+    path = "datas.txt"
+    b = str(id) 
+    c = str(0)
+    with open(path, mode='a') as f:
+        a = str("\n"+b + "!" + c)
+        f.write(a)
+#ここまで
 with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
@@ -47,7 +85,7 @@ async def on_message(message):#考えろ
     if message.author.bot:
         # もし、送信者がbotなら無視する
         return
-    if message.content == "/reload":
+    if message.content == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
     GLOBAL_CH_NAME = "global_chat" # グローバルチャットのチャンネル名
@@ -103,25 +141,11 @@ async def on_message(message):#考えろ
     if message.channel.id == 717278803893813329:
         pt1 = random.randint(0,10)
         msg = f"{pt1}ptげっと\n"
-        with open('pt.json') as f:
-            pt = json.load(f)
-        try:
-            old = int(pt[message.author.id])
-            msg += str(old) + "pt->"
-            pt.pop(message.author.id)
-            pt.pop(message.author.id)
-            pt[int(message.author.id)] = pt1 + old
-        except:
-            pt[int(message.author.id)] = pt1
-        msg += str(pt[message.author.id]) + "pt"
-        with open('pt.json', 'w') as f:
-            json.dump(pt, f, indent=2, ensure_ascii=False)
-        await message.channel.send(msg)
-        #これでうごくよな？
+        moneyadd(message.author.id,pt1)
+        await message.channel.send(f"{msg}{txtread(message.author.id)}pt")
     if message.content == "/pt":
-        with open('pt.json') as f:
-            pt = json.load(f)
-        await message.channel.send(f"{pt[message.author.id]}pt")
+        txtread(message.author.id)
+        await message.channel.send(f"{txtread(message.author.id)}pt")
 
 @client2.event#おめが
 async def on_message(message):
@@ -216,7 +240,7 @@ async def on_message(message):
             kaisuu += 1
             if kaisuu == 7:
                 await message.channel.send(msg)
-    if mc == "/reload":
+    if mc == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
 
