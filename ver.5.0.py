@@ -1,4 +1,4 @@
-import discord,requests,re,bs4,datetime,time,asyncio,json,random
+import discord,requests,re,bs4,datetime,time,asyncio,json,random,sys
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 client1 = discord.Client()
@@ -47,6 +47,9 @@ async def on_message(message):#考えろ
     if message.author.bot:
         # もし、送信者がbotなら無視する
         return
+    if message.content == "/reload":
+        await message.channel.send("再起動します")
+        sys.exit()
     GLOBAL_CH_NAME = "global_chat" # グローバルチャットのチャンネル名
     #ここから
     if message.channel.name == GLOBAL_CH_NAME:
@@ -213,6 +216,9 @@ async def on_message(message):
             kaisuu += 1
             if kaisuu == 7:
                 await message.channel.send(msg)
+    if mc == "/reload":
+        await message.channel.send("再起動します")
+        sys.exit()
 
 @client3.event#ばいばい
 async def on_message(message):
@@ -368,13 +374,27 @@ async def on_message(message):
                 await message.channel.send('お前にはできない。')
         else:
             try:
-                embed = discord.Embed(title="入札", description=int(message.content), color=0xff0000)
-                embed.set_author(name=message.author.display_name, 
-                    icon_url=message.author.avatar_url_as(format="png"))
-                topic_list=message.channel.topic.split(",,")
-                await message.delete()
-                await message.channel.send(embed=embed)
-                await message.channel.edit(topic=f"{topic_list[0]},,{message.author.name},{message.content}")
+                topic_list=message.channel.topic.split(",")
+                if  int(topic_list[7]) < int(message.content):
+                    embed = discord.Embed(title="入札", description=int(message.content), color=0xff0000)
+                    embed.set_author(name=message.author.display_name, 
+                        icon_url=message.author.avatar_url_as(format="png"))
+                    topic_list=message.channel.topic.split(",,")
+                    await message.delete()
+                    await message.channel.send(embed=embed)
+                    await message.channel.edit(topic=f"{topic_list[0]},,{message.author.name},{message.content}")
+                elif str(topic_list[3]) == str(message.content):
+                    if message.content != "none":
+                        await message.channel.delete()
+                        channel = client3.get_channel(723872932488675425)
+                        embed = discord.Embed(title="オークションが終了しました", description="", color=0xff0000)
+                        embed.add_field(name="出品物", value=topic_list[0], inline=True)
+                        embed.add_field(name="落札者", value=topic_list[6], inline=True)
+                        embed.add_field(name="落札額", value=topic_list[7], inline=True)
+                        embed.add_field(name="単位", value=topic_list[4], inline=True)
+                        embed.set_author(name=message.author.display_name, 
+                            icon_url=message.author.avatar_url_as(format="png"))
+                        await channel.send(embed=embed)
             except:
                 pass
 #よくわからんけど2レジありがとう
@@ -387,7 +407,7 @@ async def loop99():
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:58":
         mcid_uuid_dic = uuid
-        msg = "<@7394341806735361>発表時間です\n"
+        msg = "<@&7394341806735361>発表時間です\n"
         kaisuu = 0
         for mcid in mcid_uuid_dic.keys():
             uuid = mcid_uuid_dic[mcid]
@@ -400,6 +420,8 @@ async def loop99():
                 CHANNEL_ID = 707959412664303616
                 channel = client2.get_channel(CHANNEL_ID)
                 await channel.send(msg)
+    elif now == "23:55":
+        sys.exit()
 #2レジありがとう
 @tasks.loop(seconds=60)
 async def loop98():

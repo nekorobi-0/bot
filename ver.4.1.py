@@ -4,13 +4,7 @@ from discord.ext import tasks
 client1 = discord.Client()
 client2 = discord.Client()
 client3 = discord.Client()
-start1 = False
-start2 = False
-start3 = False
-start4 = False
-start5 = False
-start6 = False
-start7 = False
+start = 0
 syuppin_butu = ""
 kaishi_gaku = 0
 sokketu_gaku = 0
@@ -216,13 +210,7 @@ async def on_message(message):
 
 @client3.event#ばいばい
 async def on_message(message):
-    global start1
-    global start2
-    global start3
-    global start4
-    global start5
-    global start6
-    global start7
+    global start
     global iitai_koto
     global syuppin_butu
     global kaishi_gaku
@@ -234,73 +222,63 @@ async def on_message(message):
     if message.channel.id == 723872932488675425:
         pass
     elif message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
+        if message.content == "/reset":
+            start = 0
+            syuppin_butu = ""
+            kaishi_gaku = 0
+            sokketu_gaku = 0
+            iitai_koto = ""
+            syuppin_sya = ""
+            tanni = ""
         if client3.user in message.mentions:
-            if start1 == False:
+            if start == 0:
                 embed=discord.Embed(title="オークションを開始しますか？", description="**yes**で開始\n**no**でキャンセルします\n**必ず小文字で入力してください**", color=0xff0000)
                 await message.channel.send(embed=embed)
-                start1 = True
-        elif message.content == "yes" and start1 == True:
-            start1 = False
-            start2 = False
-            start3 = False
-            start4 = False
-            start5 = False
+                start = 1
+        elif message.content == "yes" and start == 1:
             embed = discord.Embed(title="出品物を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
-            start1 = False
-            start2 = True
+            start = 2
             return
-        elif message.content == "no" and start1 == True:
+        elif message.content == "no" and start == 1:
             await message.channel.send("キャンセルしました\n------------------------")
-            start1 = False
-        elif  start2 == True:
+            start = 0
+        elif  start == 2:
             syuppin_butu = message.content
             embed = discord.Embed(title="開始額を書いてください", description="", color=0xff0000)
             await message.channel.send(embed=embed)
-            start2 = False
-            start3 = True
+            start = 3
             return
-        elif  start3 == True:
+        elif  start == 3:
             try:
                 kaishi_gaku = int(message.content)
                 embed = discord.Embed(title="即決額を書いてください", description="なしの場合は**no**と書いてください", color=0xff0000)
                 await message.channel.send(embed=embed)
-                start4 = True
-                start3 = False
+                start = 4
             except:
                 await message.channel.send("整数で入力して下さい\nリセットします")
-                start1 = False
-                start2 = False
-                start3 = False
-                start4 = False
-                start5 = False
+                start = 0
             return
-        elif start4 == True:
+        elif start == 4:
             embed = discord.Embed(title="その他言いたいことなど", description="ない場合はなしで", color=0xff0000)
             await message.channel.send(embed=embed)
             if message.content == "no":
                 sokketu_gaku = "none"
+                start = 5
             else:
                 try:
                     sokketu_gaku = int(message.content)
-                    sokketu =True
+                    start = 5
                 except:
                     await message.channel.send("整数で入力して下さい\nリセットします")
-                    start1 = False
-                    start2 = False
-                    start3 = False
-                    start4 = False
-                    start5 = False
-            start4 = False
-            start5 = True
+                    start = 0
             return
-        elif start5 == True:
+        elif start == 5:
             iitai_koto = message.content
             embed = discord.Embed(title="単位を書いてください", description="椎名、ガチャ券など", color=0xff0000)
             await message.channel.send(embed=embed)
-            start6 = True
-            start5 = False
-        elif start6 == True:
+            start = 6
+        elif start == 6:
             tanni = message.content
             embed = discord.Embed(title="この内容でいいですか？", description="いいなら**yes**を\nダメなら**no**を", color=0xff0000)
             embed.add_field(name="出品物", value=syuppin_butu, inline=True)
@@ -309,17 +287,10 @@ async def on_message(message):
             embed.add_field(name="単位", value=tanni, inline=True)
             embed.add_field(name="言いたいこと", value=iitai_koto, inline=True)
             await message.channel.send(embed=embed)
-            start7 = True
-            start6 = False
+            start = 7
             return
-        elif message.content == "yes" and start7 == True:
-            start1 = False
-            start2 = False
-            start3 = False
-            start4 = False
-            start5 = False
-            start6 = False
-            start7 = False
+        elif message.content == "yes" and start == 7:
+            start = 0
             syuppin_sya = message.author.id
             await message.channel.purge()
             category_id = message.channel.category_id
@@ -334,17 +305,11 @@ async def on_message(message):
             embed.set_author(name=message.author.display_name, 
                 icon_url=message.author.avatar_url_as(format="png"))
             await new_channel.send(embed=embed)
-            await new_channel.edit(topic=f"{syuppin_butu},{kaishi_gaku},{sokketu_gaku},{syuppin_sya},{tanni},,なし,未入札")
+            await new_channel.edit(topic=f"{syuppin_butu},{kaishi_gaku},{sokketu_gaku},{syuppin_sya},{tanni},,なし,{kaishi_gaku}")
             return
-        elif message.content == "no" and start6 == True:
+        elif message.content == "no" and start == 6:
             await message.channel.send("キャンセルしました\n------------------------")
-            start1 = False
-            start2 = False
-            start3 = False
-            start4 = False
-            start5 = False
-            start6 = False
-            start7 = False
+            start = 0
     elif message.channel.category_id == 721478471712374811:
         if message.content == "/del":
             if message.author.guild_permissions.administrator:
@@ -368,13 +333,27 @@ async def on_message(message):
                 await message.channel.send('お前にはできない。')
         else:
             try:
-                embed = discord.Embed(title="入札", description=int(message.content), color=0xff0000)
-                embed.set_author(name=message.author.display_name, 
-                    icon_url=message.author.avatar_url_as(format="png"))
-                topic_list=message.channel.topic.split(",,")
-                await message.delete()
-                await message.channel.send(embed=embed)
-                await message.channel.edit(topic=f"{topic_list[0]},,{message.author.name},{message.content}")
+                topic_list=message.channel.topic.split(",")
+                if  int(topic_list[7]) < int(message.content):
+                    embed = discord.Embed(title="入札", description=int(message.content), color=0xff0000)
+                    embed.set_author(name=message.author.display_name, 
+                        icon_url=message.author.avatar_url_as(format="png"))
+                    topic_list=message.channel.topic.split(",,")
+                    await message.delete()
+                    await message.channel.send(embed=embed)
+                    await message.channel.edit(topic=f"{topic_list[0]},,{message.author.name},{message.content}")
+                elif str(topic_list[3]) == str(message.content):
+                    if message.content != "none":
+                        channel = client3.get_channel(723872932488675425)
+                        embed = discord.Embed(title="オークションが終了しました", description="", color=0xff0000)
+                        embed.add_field(name="出品物", value=topic_list[0], inline=True)
+                        embed.add_field(name="落札者", value=topic_list[6], inline=True)
+                        embed.add_field(name="落札額", value=topic_list[7], inline=True)
+                        embed.add_field(name="単位", value=topic_list[4], inline=True)
+                        embed.set_author(name=message.author.display_name, 
+                            icon_url=message.author.avatar_url_as(format="png"))
+                        await channel.send(embed=embed)
+                        await message.channel.delete()
             except:
                 pass
 #よくわからんけど2レジありがとう
