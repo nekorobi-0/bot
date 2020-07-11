@@ -18,6 +18,31 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
+import requests,json
+def ranking():
+    resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
+    data_json = json.loads(resp.text)
+    rank_list = list(data_json["ranks"])
+    msg = "```\n"
+    rank = 1
+    for mcid_data in rank_list:
+        get_mcid = mcid_data["player"]
+        get_data = mcid_data["data"]
+        seichi_ryo = get_data["raw_data"]
+        name = get_mcid["name"]
+        if len(str(seichi_ryo)) > 8:
+            seichi_ryo_kugiri0 = str(seichi_ryo)[-4:]
+            seichi_ryo_kugiri1 = str(seichi_ryo)[-8:-4]
+            seichi_ryo_kugiri2 = str(seichi_ryo)[:-8]
+            seichi_ryo = f"{seichi_ryo_kugiri2}億{seichi_ryo_kugiri1}万{seichi_ryo_kugiri0}"
+        elif len(str(seichi_ryo)) > 4:
+            seichi_ryo_kugiri0 = str(seichi_ryo)[-4:]
+            seichi_ryo_kugiri1 = str(seichi_ryo)[:-4]
+            seichi_ryo = seichi_ryo_kugiri1 + "万" + seichi_ryo_kugiri0
+        msg += f"{rank}位 {name} 整地量:{seichi_ryo}\n"
+        rank += 1
+    msg += "```"
+    return msg
 #ログインボーナス
 def txtread(setid):
     ints = 0
@@ -93,6 +118,8 @@ async def on_message(message):#考えろ
     if message.content == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
+    if message.content == "/seichi":
+        await message.channel.send(ranking())
     GLOBAL_CH_NAME = "global_chat" # グローバルチャットのチャンネル名
     #ここから
     if message.channel.name == GLOBAL_CH_NAME:
@@ -433,6 +460,7 @@ async def on_message(message):
     if message.content == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
+    await upa(message.content,message.channel)
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
 #Released under the MIT license
@@ -456,6 +484,8 @@ async def loop99():
                 CHANNEL_ID = 707959412664303616
                 channel = client2.get_channel(CHANNEL_ID)
                 await channel.send(msg)
+        channel = client1.get_channel(730343987906347138)
+        await channel.send(ranking())
     elif now == "23:55":
         sys.exit()
 #2レジありがとう
