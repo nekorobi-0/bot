@@ -179,6 +179,11 @@ async def on_message(message):#考えろ
         txtread(message.author.id)
         await message.channel.send(f"{txtread(message.author.id)}pt")
 
+@client1.event
+async def on_member_join(member):
+    client1.get_channel(731658529483522179)
+    await channel.send(member.mentions)
+
 @client2.event#おめが
 async def on_message(message):
     global uuid
@@ -460,7 +465,6 @@ async def on_message(message):
     if message.content == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
-    await upa(message.content,message.channel)
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
 #Released under the MIT license
