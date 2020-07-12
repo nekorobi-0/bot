@@ -19,6 +19,23 @@ iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
 import requests,json
+def mcid(mcid):
+    p = re.compile(r"^[a-zA-Z0-9_]+$")
+    if not p.fullmatch(mcid):
+        return False
+    if len(mcid) < 3:
+        return False
+    if len(mcid) > 16:
+        return False
+    url = f"https://w4.minecraftserver.jp/player/{mcid}"
+    try:
+        res = requests.get(url)
+        res.raise_for_status()
+        soup = bs4.BeautifulSoup(res.text, "html.parser")
+        td = soup.td
+        if not f'{mcid}' in f'{td}':
+            return False
+        return True
 def ranking():
     resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
     data_json = json.loads(resp.text)
@@ -474,22 +491,27 @@ async def loop99():
     global uuid
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:58":
-        mcid_uuid_dic = dict(uuid)
-        msg = "<@&7394341806735361>発表時間です\n"
-        kaisuu = 0
-        for mcid in mcid_uuid_dic.keys():
-            uuid = mcid_uuid_dic[mcid]
-            resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking/player/{uuid}?types=break')
-            data_json = json.loads(resp.text)
-            data = data_json[0]["data"]["raw_data"]
-            msg += f"{mcid}の整地量>>>{data}\n"
-            kaisuu += 1
-            if kaisuu == 7:
-                CHANNEL_ID = 707959412664303616
-                channel = client2.get_channel(CHANNEL_ID)
-                await channel.send(msg)
-        channel = client1.get_channel(730343987906347138)
-        await channel.send(ranking())
+        try
+            mcid_uuid_dic = dict(uuid)
+            msg = "<@&7394341806735361>発表時間です\n"
+            kaisuu = 0
+            for mcid in mcid_uuid_dic.keys():
+                uuid = mcid_uuid_dic[mcid]
+                resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking/player/{uuid}?types=break')
+                data_json = json.loads(resp.text)
+                data = data_json[0]["data"]["raw_data"]
+                msg += f"{mcid}の整地量>>>{data}\n"
+                kaisuu += 1
+                if kaisuu == 7:
+                    CHANNEL_ID = 707959412664303616
+                    channel = client2.get_channel(CHANNEL_ID)
+                    await channel.send(msg)
+            channel = client1.get_channel(730343987906347138)
+            await channel.send(ranking())
+        except:
+            CHANNEL_ID = 707959412664303616
+            channel = client2.get_channel(CHANNEL_ID)
+            await channel.send("エラーが発生したんで今日はないです")
     elif now == "23:55":
         sys.exit()
 #2レジありがとう
