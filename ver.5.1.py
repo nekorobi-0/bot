@@ -474,7 +474,7 @@ async def loop99():
     global uuid
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:58":
-        mcid_uuid_dic = uuid
+        mcid_uuid_dic = dict(uuid)
         msg = "<@&7394341806735361>発表時間です\n"
         kaisuu = 0
         for mcid in mcid_uuid_dic.keys():
