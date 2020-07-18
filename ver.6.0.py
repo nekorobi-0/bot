@@ -21,8 +21,6 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
-with open(path) as f:
-    code = f.readlines()
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
@@ -512,11 +510,6 @@ async def loop99():
 #2レジありがとう
 @tasks.loop(seconds=60)
 async def loop98():
-    global code
-    with open(path) as f:
-        code_new = f.readlines()
-    if code_new == code:
-        sys.exit()
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:59":
         with open('webhook.json') as f:
