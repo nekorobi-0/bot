@@ -3,6 +3,7 @@ start = time.time()
 import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
+from discord import Webhook, RequestsWebhookAdapter
 client1 = discord.Client()
 client2 = discord.Client()
 client3 = discord.Client()
@@ -107,9 +108,11 @@ async def on_ready():
     global start
     stop =time.time()
     result = stop -start
-    CHANNEL_ID = 713273848124014592
-    channel = client1.get_channel(CHANNEL_ID)
-    await channel.send(f"{result}秒で再起動しました(テキトー)")
+    with open('webhook.json') as f:
+        webhook_iroioro = json.load(f)
+    #この鯖は自由なんでそのまんま書いてません
+    webhook = Webhook.partial(734178673162321930, webhook_iroioro["token"], adapter=RequestsWebhookAdapter())
+    webhook.send(f"{result}秒で再起動しました(テキトー)", username='再起動君',avatar_url=webhook_iroioro["avater"])
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
     await client3.change_presence(activity=discord.Game(name='監視中'))
