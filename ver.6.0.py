@@ -110,9 +110,8 @@ async def on_ready():
     result = stop -start
     with open('webhook.json') as f:
         webhook_iroioro = json.load(f)
-    #この鯖は自由なんでそのまんま書いてません
-    webhook = Webhook.partial(734178673162321930, webhook_iroioro["token"], adapter=RequestsWebhookAdapter())
-    webhook.send(f"{result}秒で再起動しました(テキトー)", username='再起動君',avatar_url=webhook_iroioro["avater"])
+    webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
+    webhook.send(f"{result}秒で再起動しました(テキトー)", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
     await client3.change_presence(activity=discord.Game(name='監視中'))
@@ -509,9 +508,10 @@ async def loop99():
 async def loop98():
     now = datetime.datetime.now().strftime("%H:%M")
     if now == "23:59":
-        CHANNEL_ID = 713248979571179560
-        channel = client1.get_channel(CHANNEL_ID)
-        await channel.send("そろそろ日付が変わります")
+        with open('webhook.json') as f:
+            webhook_iroioro = json.load(f)
+        webhook = Webhook.partial(734184972059017236, webhook_iroioro["token_hizuke"], adapter=RequestsWebhookAdapter())
+        webhook.send("たぶん日付変わる直前", username='日付変更君',avatar_url=webhook_iroioro["avater_hizuke"])
 #token
 with open('token.json') as f:
     token = json.load(f)
