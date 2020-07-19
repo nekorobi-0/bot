@@ -123,60 +123,37 @@ async def on_ready():
 @client1.event
 async def on_message(message):#考えろ
     if message.author.bot:
-        # もし、送信者がbotなら無視する
         return
     if message.content == "/reboot":
         await message.channel.send("再起動します")
         sys.exit()
     if message.content == "/seichi":
         await message.channel.send(ranking())
-    GLOBAL_CH_NAME = "global_chat" # グローバルチャットのチャンネル名
-    #ここから
+    GLOBAL_CH_NAME = "global_chat"
     if message.channel.name == GLOBAL_CH_NAME:
-        # hoge-globalの名前をもつチャンネルに投稿されたので、メッセージを転送する
-
-        await message.delete() # 元のメッセージは削除しておく
-
+        await message.delete()
         channels = client1.get_all_channels()
         global_channels = [ch for ch in channels if ch.name == GLOBAL_CH_NAME]
-        # channelsはbotの取得できるチャンネルのイテレーター
-        # global_channelsは hoge-global の名前を持つチャンネルのリスト
-
         embed = discord.Embed(title="グローバル1",
             description=message.content, color=0x00bfff)
-
         embed.set_author(name=message.author.display_name, 
             icon_url=message.author.avatar_url_as(format="png"))
         embed.set_footer(text=f"{message.guild.name} / {message.channel.name}",
             icon_url=message.guild.icon_url_as(format="png"))
-        # Embedインスタンスを生成、投稿者、投稿場所などの設定
-
         for channel in global_channels:
-            # メッセージを埋め込み形式で転送
             await channel.send(embed=embed)
-    GLOBAL_CH_NAME = "global_chat2" # グローバルチャットのチャンネル名
-
+    GLOBAL_CH_NAME = "global_chat2"
     if message.channel.name == GLOBAL_CH_NAME:
-        # hoge-globalの名前をもつチャンネルに投稿されたので、メッセージを転送する
-
-        await message.delete() # 元のメッセージは削除しておく
-
+        await message.delete()
         channels = client1.get_all_channels()
         global_channels = [ch for ch in channels if ch.name == GLOBAL_CH_NAME]
-        # channelsはbotの取得できるチャンネルのイテレーター
-        # global_channelsは hoge-global の名前を持つチャンネルのリスト
-
         embed = discord.Embed(title="グローバル2",
             description=message.content, color=0x00bfff)
-
         embed.set_author(name=message.author.display_name, 
             icon_url=message.author.avatar_url_as(format="png"))
         embed.set_footer(text=f"{message.guild.name} / {message.channel.name}",
             icon_url=message.guild.icon_url_as(format="png"))
-        # Embedインスタンスを生成、投稿者、投稿場所などの設定
-
         for channel in global_channels:
-            # メッセージを埋め込み形式で転送
             await channel.send(embed=embed)
     #ここまでグローバル
     #ここからログぼ
