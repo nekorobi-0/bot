@@ -4,6 +4,10 @@ import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 from discord import Webhook, RequestsWebhookAdapter
+with open('webhook.json') as f:
+    webhook_iroioro = json.load(f)
+webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
+webhook.send(f"importが終わりました{time.time() - start}秒importにかかりました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
 client1 = discord.Client()
 client2 = discord.Client()
 client3 = discord.Client()
@@ -115,7 +119,7 @@ async def on_ready():
     with open('webhook.json') as f:
         webhook_iroioro = json.load(f)
     webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
-    webhook.send(f"{result}秒で再起動しました(テキトー)", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
+    webhook.send(f"再起動が終わりました{result}秒再起動にかかりました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
     await client3.change_presence(activity=discord.Game(name='監視中'))
