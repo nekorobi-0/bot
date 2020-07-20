@@ -120,6 +120,8 @@ async def on_ready():
         webhook_iroioro = json.load(f)
     webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
     webhook.send(f"再起動が終わりました{result}秒再起動にかかりました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
+    webhook = Webhook.partial(734666355944718428, webhook_iroioro["token_reboot1"], adapter=RequestsWebhookAdapter())
+    webhook.send(f"再起動が終わりました{result}秒再起動にかかりました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
     await client3.change_presence(activity=discord.Game(name='監視中'))
