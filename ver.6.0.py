@@ -171,6 +171,13 @@ async def on_message(message):#考えろ
     if message.content == "/pt":
         txtread(message.author.id)
         await message.channel.send(f"{txtread(message.author.id)}pt")
+    #update_rog
+    if message.channel.id == 735069077281833010:
+        channel = client1.get_channel(734666320448323596)
+        embed = discord.Embed(title="bot_update", description=message.content, color=0xff0000)
+        await channel.send(embed=embed)
+
+
 
 @client1.event
 async def on_member_join(member):
