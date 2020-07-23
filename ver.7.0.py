@@ -42,7 +42,7 @@ async def kabu(type_type,imput):
                     text = dataaa[ints]
                     text2=text.split("!")
                     text3 = text2[0].split("\n")
-                        idid = int(text3[0])
+                    idid = int(text3[0])
                     ints = ints + 1
             except:
                 b = str(id) 
@@ -73,7 +73,29 @@ async def kabu(type_type,imput):
             #white_read
             #流用
             if category == "kabu":
-                money = read_kabu(id)
+                def read_kabu(id):#これなんだったけ？
+                            ints = 0
+                    path = "kabu.txt"
+                    with open(path) as f:
+                        dataaa = f.readlines()
+                        idid = int("0")
+                    try:
+                        while idid != setid:
+                            text2=[]
+                            text = dataaa[ints]
+                            text2=text.split("!")
+                            text3 = text2[0].split("\n")
+                            idid = int(text3[0])
+                            ints = ints + 1
+                    except:
+                        b = str(id) 
+                        c = str(0)
+                        with open(path, mode='a') as f:
+                            a = str("\n"+b + "!" + c)
+                            f.write(a)
+                        return read_kabu(setid)
+                    return int(text2[1])
+                money = read_temp(id)
                 setmoney= int(money) + int(add)
                 newdata =str(id) + "!" + str(setmoney)
                 olddata = str(id) + "!" + str(money)
@@ -88,15 +110,21 @@ async def kabu(type_type,imput):
             white_files(id,"kabu",add)
             return
         elif category == "kabuka":
-            #株か
-            def get_temp():
+            #株価
+            def add_temp(num):
+                file_name = "temp.txt"
+                with open(file_name, encoding="cp932") as f:
+                    data_lines = f.read()
+                data_lines[num] += 1 
                 data_lines = data_lines.replace(olddata,newdata)
                 with open(file_name, mode="w", encoding="cp932") as f:
                     f.write(data_lines)
             if id == "1mryo":
                 #1~0時間前の注文数
+                add_temp(0)
             elif id == "2mryo":
                 #2~1時間前の注文数
+                add_temp(1)
     def make_glaf():
         #make_glaf
     #最終階層
@@ -113,6 +141,8 @@ async def kabu(type_type,imput):
         await channel.send(File=file_img)
     elif type_type == "get":
         #get
+        if imput == "kabuka":
+            read_file(id)
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
