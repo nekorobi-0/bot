@@ -26,15 +26,29 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
-async def omega_kabu(type_type,imput):
-    #高確率でやらかしそうなので隔離
-    #非同期関数じゃなくてもいいかも
-    if type_type == "buy":
-        #buy
-    elif type_type == "sell":
-        #sell
-    elif type_type == "time_update":
-        #update
+async def kabu():
+    def white_file(id,category):
+        #white_read
+    def read_file(id,category):
+        #file_read
+    def make_glaf():
+        #make_glaf
+    async def kabu_iroiro(type_type,imput):
+        #高確率でやらかしそうなので隔離
+        #非同期関数じゃなくてもいいかも
+        if type_type == "buy":
+            #buy
+        elif type_type == "sell":
+            #sell
+        elif type_type == "time_update":
+            #update
+            graf()
+            channel = client2.get_channel(698394665707241472)
+            file_img = discord.File(path)
+            await channel.send(File=file_img)
+        elif type_type == "get":
+            #get
+kabu()
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
