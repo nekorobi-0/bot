@@ -26,29 +26,93 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
-async def kabu():
-    def white_file(id,category):
-        #white_read
+async def kabu(type_type,imput):
+    #ファイル
+    #第２階層
     def read_file(id,category):
+        def read_kabu(id):
+            ints = 0
+            path = "kabu.txt"
+            with open(path) as f:
+                dataaa = f.readlines()
+                idid = int("0")
+            try:
+                while idid != setid:
+                    text2=[]
+                    text = dataaa[ints]
+                    text2=text.split("!")
+                    text3 = text2[0].split("\n")
+                        idid = int(text3[0])
+                    ints = ints + 1
+            except:
+                b = str(id) 
+                c = str(0)
+                with open(path, mode='a') as f:
+                    a = str("\n"+b + "!" + c)
+                    f.write(a)
+                return read_kabu(setid)
+            return int(text2[1])
         #file_read
+        if category == "kabu":
+            return read_kabu(id)
+        elif category == "kabuka":#ここからファイル処理
+            #株か
+            path = "temp.txt"
+            with open(path) as f:
+                list_data = f.readlines()
+            if id == "1mryo":
+                #1~0時間前の注文数
+                return list(list_data)[0]
+            elif id == "2mryo":
+                #2~1時間前の注文数
+                return list(list_data)[1]
+    def white_file(id,category,add):
+        #white_read
+        #書き込み
+        def white_files(id,category,add):
+            #white_read
+            #流用
+            if category == "kabu":
+                money = read_kabu(id)
+                setmoney= int(money) + int(add)
+                newdata =str(id) + "!" + str(setmoney)
+                olddata = str(id) + "!" + str(money)
+                file_name = "kabu.txt"
+                with open(file_name, encoding="cp932") as f:
+                    data_lines = f.read()
+                data_lines = data_lines.replace(olddata,newdata)
+                with open(file_name, mode="w", encoding="cp932") as f:
+                    f.write(data_lines)
+        if category == "kabu":
+            #所有りょうとか
+            white_files(id,"kabu",add)
+            return
+        elif category == "kabuka":
+            #株か
+            def get_temp():
+                data_lines = data_lines.replace(olddata,newdata)
+                with open(file_name, mode="w", encoding="cp932") as f:
+                    f.write(data_lines)
+            if id == "1mryo":
+                #1~0時間前の注文数
+            elif id == "2mryo":
+                #2~1時間前の注文数
     def make_glaf():
         #make_glaf
-    async def kabu_iroiro(type_type,imput):
-        #高確率でやらかしそうなので隔離
-        #非同期関数じゃなくてもいいかも
-        if type_type == "buy":
-            #buy
-        elif type_type == "sell":
-            #sell
-        elif type_type == "time_update":
-            #update
-            graf()
-            channel = client2.get_channel(698394665707241472)
-            file_img = discord.File(path)
-            await channel.send(File=file_img)
-        elif type_type == "get":
-            #get
-kabu()
+    #最終階層
+    #高確率でやらかしそうなので隔離
+    if type_type == "buy":
+        #buy
+    elif type_type == "sell":
+        #sell
+    elif type_type == "time_update":
+        #update
+        graf()
+        channel = client2.get_channel(698394665707241472)
+        file_img = discord.File(path)
+        await channel.send(File=file_img)
+    elif type_type == "get":
+        #get
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
