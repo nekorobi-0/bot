@@ -1,6 +1,7 @@
 import time
 start = time.time()
 import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
+import matplotlib as mpl
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 from discord import Webhook, RequestsWebhookAdapter
@@ -25,9 +26,15 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
-async def omega_kabu():
+async def omega_kabu(type_type,imput):
     #高確率でやらかしそうなので隔離
     #非同期関数じゃなくてもいいかも
+    if type_type == "buy":
+        #buy
+    elif type_type == "sell":
+        #sell
+    elif type_type == "time_update":
+        #update
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
