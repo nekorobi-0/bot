@@ -5,6 +5,7 @@ import matplotlib as mpl
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 from discord import Webhook, RequestsWebhookAdapter
+import matplotlib.pyplot as plt
 with open('webhook.json') as f:
     webhook_iroioro = json.load(f)
 webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
@@ -141,6 +142,16 @@ async def kabu(type_type,imput,imput2):
                     f.writelines(l)
     def make_glaf(kabuka):
         #make_glaf
+        with open("kabuka.txt", encoding="cp932") as f:
+            data = f.read()
+        data.split("\n")[0:24]
+        plt.title("株価グラフ")
+        plt.xlabel("時間")
+        plt.ylabel("株価(椎名)")
+        x = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+        y = data.split("\n")[0:23]
+        plt.plot(x, y);
+        plt.savefig("kabuka.png")
     #最終階層
     #高確率でやらかしそうなので隔離
     if type_type == "buy_sell":
@@ -158,12 +169,12 @@ async def kabu(type_type,imput,imput2):
         #update
         graf()
         channel = client2.get_channel(698394665707241472)
-        file_img = discord.File(path)
+        file_img = discord.File("kabuka.png")
         await channel.send(File=file_img)
     elif type_type == "get":
         #get
         if imput == "kabuka":
-            read_file("kabuka",)
+            return read_file("kabuka",0)
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
