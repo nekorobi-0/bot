@@ -5,6 +5,8 @@ import matplotlib as mpl
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 from discord import Webhook, RequestsWebhookAdapter
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 with open('webhook.json') as f:
     webhook_iroioro = json.load(f)
@@ -27,7 +29,7 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
-async def kabu(type_type,imput,imput2):
+async def kabu(type_type,imput,imput2,imput3):
     #ファイル
     #第２階層
     def read_file(ids,category):
@@ -38,7 +40,7 @@ async def kabu(type_type,imput,imput2):
                 dataaa = f.readlines()
                 idid = int("0")
             try:
-                while idid != setid:
+                while idid != ids:
                     text2=[]
                     text = dataaa[ints]
                     text2=text.split("!")
@@ -51,7 +53,7 @@ async def kabu(type_type,imput,imput2):
                 with open(path, mode='a') as f:
                     a = str("\n"+b + "!" + c)
                     f.write(a)
-                return read_kabu(setid)
+                return read_kabu(ids)
             return int(text2[1])
         #file_read
         if category == "kabu":
@@ -60,13 +62,14 @@ async def kabu(type_type,imput,imput2):
             #株か
             path = "temp.txt"
             with open(path) as f:
-                list_data = f.readlines()
+                data = f.readlines()
+            list0 = data
             if ids == "1mryo":
                 #1~0時間前の注文数
-                return list(list_data)[0]
+                return list0[0]
             elif ids == "2mryo":
                 #2~1時間前の注文数
-                return list(list_data)[1]
+                return list0[1]
             elif ids == "kabuka":
                 with open("kabuka.txt", encoding="cp932") as f:
                     data = f.read()
@@ -85,7 +88,7 @@ async def kabu(type_type,imput,imput2):
                         dataaa = f.readlines()
                         idid = int("0")
                     try:
-                        while idid != setid:
+                        while idid != ids:
                             text2=[]
                             text = dataaa[ints]
                             text2=text.split("!")
@@ -98,9 +101,9 @@ async def kabu(type_type,imput,imput2):
                         with open(path, mode='a') as f:
                             a = str("\n"+b + "!" + c)
                             f.write(a)
-                        return read_kabu(setid)
+                        return read_kabu(ids)
                     return int(text2[1])
-                money = read_temp(ids)
+                money = read_kabu(ids)
                 setmoney= int(money) + int(add)
                 newdata =str(ids) + "!" + str(setmoney)
                 olddata = str(ids) + "!" + str(money)
@@ -116,23 +119,21 @@ async def kabu(type_type,imput,imput2):
             return
         elif category == "kabuka":
             #株価
-            def add_temp(num):
+            def add_temp(add):
                 file_name = "temp.txt"
                 with open(file_name, encoding="cp932") as f:
-                    data_lines = f.read()
-                olddata = list(data_lines)
-                newdata = list(olddata)
-                newdata[num] += 1 
+                    data_lines = f.readlines()
+                olddata = data_lines
+                newdata = olddata
+                data1 = int(olddata[0]) + int(add)
+                newdata = f"{data1}\n{int(sp[1])}"
                 data_lines = data_lines.replace(olddata,newdata)
                 with open(file_name, mode="w", encoding="cp932") as f:
                     f.write(data_lines)
             if ids == "1mryo":
                 #1~0時間前の注文数
-                add_temp(0)
-            elif ids == "2mryo":
-                #2~1時間前の注文数
-                add_temp(1)
-            else ids == "kabuka":
+                add_temp(add)
+            elif ids == "kabuka":
                 #
                 path_w = "kabuka.txt"
                 with open(path_w) as f:
@@ -140,41 +141,54 @@ async def kabu(type_type,imput,imput2):
                 l.insert(0, f"{ids}\n")
                 with open(path_w, mode='w') as f:
                     f.writelines(l)
-    def make_glaf(kabuka):
+    def make_glaf():
         #make_glaf
         with open("kabuka.txt", encoding="cp932") as f:
             data = f.read()
-        data.split("\n")[0:24]
-        plt.title("株価グラフ")
-        plt.xlabel("時間")
-        plt.ylabel("株価(椎名)")
         x = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
-        y = data.split("\n")[0:23]
+        t = data.split("\n")[0:24]
+        y = []
+        for i in range(24):
+            y.append(float(t[23-i]))
+        print(y)
         plt.plot(x, y);
         plt.savefig("kabuka.png")
     #最終階層
     #高確率でやらかしそうなので隔離
     if type_type == "buy_sell":
         #buy or sell
-        white_file(ids,"kabu",imput)
+        white_file(imput2,"kabu",imput)
         channel = client2.get_channel(698394665707241472)
-        await channel.send(f"{imput2}が{imput}株購入しました\n{read_file("kabuka","kabuka")}椎名もちに渡しといてね")
+        siina = int(read_file("kabuka","kabuka")) * imput
+        await channel.send(f"{imput3}が{imput}株購入しました\n{siina}椎名もちに渡しといてね")
     elif type_type == "time_update":
-        def reset():
-            num = 8+0.05*{int(read_file("1mryo"))-int(read_file("2mryo"))} + {random.randint(8,12)/10}
-            white_file(num,"kabuka",0)
-            data = [0,read_file("1mryo","kabuka",0)]
-            with open("temp.txt", mode="w", encoding="cp932") as f:
-                f.write(data)
+        tekitou1 = int(read_file("1mryo","kabuka"))-int(read_file("2mryo","kabuka"))
+        tekitou2 = random.randint(8,12)/10
+        tekitou3 = 0.05 * tekitou1
+        numnum = 8 * tekitou2
+        num = numnum + tekitou3
+        print(num)
+        path_w = "kabuka.txt"
+        with open(path_w) as f:
+            l = f.readlines()
+        l.insert(0, f"{num}\n")
+        with open(path_w, mode='w') as f:
+            f.writelines(l)
+        hozon1 = read_file("1mryo","kabuka")
+        data = f"0\n{hozon1}"
+        with open("temp.txt", mode="w", encoding="cp932") as f:
+            f.write(data)
         #update
-        graf()
+        make_glaf()
         channel = client2.get_channel(698394665707241472)
-        file_img = discord.File("kabuka.png")
-        await channel.send(File=file_img)
+        await channel.send(file=discord.File("kabuka.png"))
+        await channel.send(f"株価{num}椎名")
     elif type_type == "get":
         #get
         if imput == "kabuka":
-            return read_file("kabuka",0)
+            return read_file("kabuka","kabuka")
+        elif imput == "kabu":
+            return int(read_file(imput2,"kabu"))
 def ranking():
     try:
         resp = requests.get(f'https://w4.minecraftserver.jp/api/ranking?type=break&offset=0&lim=50&duration=daily')
@@ -342,6 +356,23 @@ async def on_message(message):
     cid=int(message.channel.id)#チャンネルＩＤ保存
     if message.author.bot:#botはじいてる
         return
+    #株システム
+    if message.content == "/kabu":
+        await message.channel.send(await kabu("get","kabu",message.author.id,0))
+    if mc == "/time":
+        await kabu("time_update",0,0,0)
+    if cid == 698394665707241472:
+        try:
+            int_nisuru = int(mc)
+            imano_Kabu = await kabu("get","kabu",message.author.id,0)
+            if int_nisuru + imano_Kabu < 0:
+                await message.channel.send("あははは\n借金はできないよ\nあははは")
+                return
+            await kabu("buy_sell",int_nisuru,message.author.id,mn)
+        except:
+            await message.channel.send("数字で入力しろ")
+            return
+        #注文株 > 持ってる株
     if cid == 697854272506953818:
         mcid = message.content
         p = re.compile(r"^[a-zA-Z0-9_]+$")
