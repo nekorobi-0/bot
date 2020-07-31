@@ -1,6 +1,11 @@
 import time
 start = time.time()
 import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
+now = datetime.datetime.now().strftime("%H:%M")
+if now[3:] == "00":
+    while now[3:] == "00":
+        time.sleep(1)
+        now = datetime.datetime.now().strftime("%H:%M")
 import matplotlib as mpl
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
@@ -29,6 +34,13 @@ sokketu_gaku = 0
 iitai_koto = ""
 syuppin_sya = ""
 tanni = ""
+async def reboot():
+    with open('webhook.json') as f:
+        webhook_iroioro = json.load(f)
+    webhook = Webhook.partial(734178673162321930, webhook_iroioro["token_reboot"], adapter=RequestsWebhookAdapter())
+    webhook.send("再起動、始めました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
+    webhook = Webhook.partial(734666355944718428, webhook_iroioro["token_reboot1"], adapter=RequestsWebhookAdapter())
+    webhook.send("再起動、始めました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
 async def kabu(type_type,imput,imput2,imput3):
     #ファイル
     #第２階層
@@ -126,7 +138,7 @@ async def kabu(type_type,imput,imput2,imput3):
                 olddata = data_lines
                 newdata = olddata
                 data1 = int(olddata[0]) + int(add)
-                newdata = f"{data1}\n{int(sp[1])}"
+                newdata = f"{data1}\n{int(olddata[1])}"
                 data_lines = data_lines.replace(olddata,newdata)
                 with open(file_name, mode="w", encoding="cp932") as f:
                     f.write(data_lines)
@@ -159,14 +171,29 @@ async def kabu(type_type,imput,imput2,imput3):
         #buy or sell
         white_file(imput2,"kabu",imput)
         channel = client2.get_channel(698394665707241472)
-        siina = int(read_file("kabuka","kabuka")) * imput
+        siina = float(read_file("kabuka","kabuka")) * imput
         await channel.send(f"{imput3}が{imput}株購入しました\n{siina}椎名もちに渡しといてね")
+        def add_temp(add):
+            file_name = "temp.txt"
+            with open(file_name, encoding="cp932") as f:
+                data_lines = f.readlines()
+            olddata = data_lines
+            newdata = olddata
+            data1 = int(olddata[0]) + int(add)
+            newdata = f"{data1}\n{int(olddata[1])}"
+            with open(file_name, mode="w", encoding="cp932") as f:
+                f.write(newdata)
+        add_temp(imput)
     elif type_type == "time_update":
         tekitou1 = int(read_file("1mryo","kabuka"))-int(read_file("2mryo","kabuka"))
         tekitou2 = random.randint(8,12)/10
         tekitou3 = 0.05 * tekitou1
         numnum = 8 * tekitou2
         num = numnum + tekitou3
+        if num < 6:
+            num = 6.0
+        elif num > 30:
+            num = 30.0
         print(num)
         path_w = "kabuka.txt"
         with open(path_w) as f:
@@ -183,6 +210,8 @@ async def kabu(type_type,imput,imput2,imput3):
         channel = client2.get_channel(698394665707241472)
         await channel.send(file=discord.File("kabuka.png"))
         await channel.send(f"株価{num}椎名")
+        await reboot()
+        sys.exit()
     elif type_type == "get":
         #get
         if imput == "kabuka":
@@ -293,9 +322,13 @@ async def on_ready():
 @client1.event
 async def on_message(message):#考えろ
     if message.author.bot:
+        #github
+        if message.channel.id == 716910499303784509:
+            sys.exit()
         return
     if message.content == "/reboot":
         await message.channel.send("再起動します")
+        await reboot()
         sys.exit()
     if message.content == "/seichi":
         await message.channel.send(ranking())
@@ -328,10 +361,11 @@ async def on_message(message):#考えろ
     #ここまでグローバル
     #ここからログぼ
     if message.channel.id == 717278803893813329:
-        pt1 = random.randint(0,10)
+        old =  txtread(message.author.id)
+        pt1 = random.randint(-10,20)
         msg = f"{message.author.mention}{pt1}ptげっと\n"
         moneyadd(message.author.id,pt1)
-        await message.channel.send(f"{msg}{txtread(message.author.id)}pt")
+        await message.channel.send(f"{msg}{old}->{txtread(message.author.id)}pt")
     if message.content == "/pt":
         txtread(message.author.id)
         await message.channel.send(f"{txtread(message.author.id)}pt")
@@ -346,7 +380,34 @@ async def on_message(message):#考えろ
 @client1.event
 async def on_member_join(member):
     channel = client1.get_channel(731658529483522179)
-    await channel.send(member.mention + "さんが参加した様子")
+    await channel.send(f"{member.mention}さんが{member.guild.name}に参加した様子")
+
+@client1.event
+async def on_member_remove(member):
+    channel = client1.get_channel(731658529483522179)
+    await channel.send(f"{member.mention}さんが{member.guild.name}を退出した様子")
+
+@client1.event
+async def on_guild_join(guild):
+    channel = client1.get_channel(731658529483522179)
+    await channel.send(f"botが{guild.name}に参加した様子")
+
+@client1.event
+async def on_guild_remove(guild):
+    channel = client1.get_channel(731658529483522179)
+    await channel.send(f"botが{guild.name}から抜けた様子")
+
+@client1.event
+async def on_guild_channel_create(channel):
+    msg = f"{channel.guild.name}で{channel.name}が作成された様子"
+    channel = client1.get_channel(737207294458069053)
+    await channel.send(msg)
+
+@client1.event
+async def on_guild_channel_delete(channel):
+    msg = f"{channel.guild.name}の{channel.name}が削除された様子"
+    channel = client1.get_channel(737207294458069053)
+    await channel.send(msg)
 
 @client2.event#おめが
 async def on_message(message):
@@ -460,6 +521,7 @@ async def on_message(message):
                 await message.channel.send(msg)
     if mc == "/reboot":
         await message.channel.send("再起動します")
+        await reboot()
         sys.exit()
 
 @client3.event#ばいばい
@@ -645,6 +707,7 @@ async def on_message(message):
         return
     if message.content == "/reboot":
         await message.channel.send("再起動します")
+        await reboot()
         sys.exit()
 #よくわからんけど2レジありがとう
 #Copyright (c) 2020 disneyresidents
@@ -654,6 +717,8 @@ async def on_message(message):
 async def loop99():
     global uuid
     now = datetime.datetime.now().strftime("%H:%M")
+    if now[3:] == "00":
+        await kabu("time_update",0,0,0)
     if now == "23:58":
         try:
             mcid_uuid_dic = dict(uuid)
@@ -677,6 +742,7 @@ async def loop99():
             channel = client2.get_channel(CHANNEL_ID)
             await channel.send("エラーが発生したんで今日はないです")
     elif now == "23:55":
+        await reboot()
         sys.exit()
 #2レジありがとう
 @tasks.loop(seconds=60)
