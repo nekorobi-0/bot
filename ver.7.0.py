@@ -177,7 +177,7 @@ async def kabu(type_type,imput,imput2,imput3):
         channel = client2.get_channel(698362068746895442)
         siina = float(read_file("kabuka","kabuka")) * imput
         if siina < 0:
-            siina = siina * 4
+            siina = siina / 4 
         await channel.send(f"{imput3}が{imput}株購入しました\n{siina}椎名もちに渡しといてね")
         def add_temp(add):
             file_name = "temp.txt"
@@ -297,18 +297,14 @@ async def on_ready():
     print('Logged in as')
     print(client2.user.name)
     print(client2.user.id)
-    print('------')
-    print('Logged in as')
     print(client1.user.name)
     print(client1.user.id)
-    print('------')
-    print('Logged in as')
     print(client3.user.name)
     print(client3.user.id)
-    print('------')
-    print('Logged in as')
     print(client4.user.name)
     print(client4.user.id)
+    print(ext_client.user.name)
+    print(ext_client.user.id)
     print('------')
     loop99.start()
     loop98.start()
@@ -425,6 +421,10 @@ async def on_message(message):
     if message.author.bot:#botはじいてる
         return
     #株システム
+    if mc == "/file":
+        await message.channel.send(file=discord.File("kabuka.txt"))
+        await message.channel.send(file=discord.File("kabu.txt"))
+        await message.channel.send(file=discord.File("temp.txt"))
     if mc == "/help":
         await message.channel.send("**help**\n株\n<#698362068746895442>で数字を入力すると買えます\n<#698359379061243994>で株価を発表します")
     if message.content == "/kabu":
