@@ -1,6 +1,6 @@
 import time
 start = time.time()
-import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
+import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json,seichi_ranking
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks
 from discord import Webhook, RequestsWebhookAdapter
@@ -134,7 +134,7 @@ async def on_message(message):#考えろ
         await message.channel.send("再起動します")
         sys.exit()
     if message.content == "/seichi":
-        await message.channel.send(ranking())
+        await message.channel.send("```\n" + seichi_ranking.ranking(lim=50,unit=True) + "```")
     GLOBAL_CH_NAME = "global_chat"
     if message.channel.name == GLOBAL_CH_NAME:
         await message.delete()
