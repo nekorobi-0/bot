@@ -1,6 +1,6 @@
 import time
 start = time.time()
-import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
+import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json,seichi_ranking
 now = datetime.datetime.now().strftime("%H:%M")
 if now[3:] == "00":
     while now[3:] == "00":
@@ -170,8 +170,10 @@ async def kabu(type_type,imput,imput2,imput3):
     if type_type == "buy_sell":
         #buy or sell
         white_file(imput2,"kabu",imput)
-        channel = client2.get_channel(698394665707241472)
+        channel = client2.get_channel(698359379061243994)
         siina = float(read_file("kabuka","kabuka")) * imput
+        if siina < 0:
+            siina = siina * 4
         await channel.send(f"{imput3}が{imput}株購入しました\n{siina}椎名もちに渡しといてね")
         def add_temp(add):
             file_name = "temp.txt"
@@ -188,12 +190,12 @@ async def kabu(type_type,imput,imput2,imput3):
         tekitou1 = int(read_file("1mryo","kabuka"))-int(read_file("2mryo","kabuka"))
         tekitou2 = random.randint(8,12)/10
         tekitou3 = 0.05 * tekitou1
-        numnum = 8 * tekitou2
+        numnum = 10 * tekitou2
         num = numnum + tekitou3
-        if num < 6:
-            num = 6.0
-        elif num > 30:
-            num = 30.0
+        if num < 8:
+            num = 8.0
+        elif num > 32:
+            num = 32.0
         print(num)
         path_w = "kabuka.txt"
         with open(path_w) as f:
@@ -207,7 +209,7 @@ async def kabu(type_type,imput,imput2,imput3):
             f.write(data)
         #update
         make_glaf()
-        channel = client2.get_channel(698394665707241472)
+        channel = client2.get_channel(698359379061243994)
         await channel.send(file=discord.File("kabuka.png"))
         await channel.send(f"株価{num}椎名")
         await reboot()
@@ -421,8 +423,9 @@ async def on_message(message):
     if message.content == "/kabu":
         await message.channel.send(await kabu("get","kabu",message.author.id,0))
     if mc == "/time":
-        await kabu("time_update",0,0,0)
-    if cid == 698394665707241472:
+        if message.author.id == 690386791831830578 or message.author.id == 672910471279673358:
+            await kabu("time_update",0,0,0)
+    if cid == 698362068746895442:
         try:
             int_nisuru = int(mc)
             imano_Kabu = await kabu("get","kabu",message.author.id,0)
