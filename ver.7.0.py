@@ -41,6 +41,10 @@ async def reboot():
     webhook.send("再起動、始めました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
     webhook = Webhook.partial(734666355944718428, webhook_iroioro["token_reboot1"], adapter=RequestsWebhookAdapter())
     webhook.send("再起動、始めました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
+    await client1.change_presence(activity=discord.Game(name="停止中"))
+    await client2.change_presence(activity=discord.Game(name="停止中"))
+    await client3.change_presence(activity=discord.Game(name='停止中'))
+    await client4.change_presence(activity=discord.Game(name='停止中'))
 async def kabu(type_type,imput,imput2,imput3):
     #ファイル
     #第２階層
@@ -170,7 +174,7 @@ async def kabu(type_type,imput,imput2,imput3):
     if type_type == "buy_sell":
         #buy or sell
         white_file(imput2,"kabu",imput)
-        channel = client2.get_channel(698359379061243994)
+        channel = client2.get_channel(698362068746895442)
         siina = float(read_file("kabuka","kabuka")) * imput
         if siina < 0:
             siina = siina * 4
@@ -320,6 +324,7 @@ async def on_ready():
     await client1.change_presence(activity=discord.Game(name="稼働中"))
     await client2.change_presence(activity=discord.Game(name="稼働中"))
     await client3.change_presence(activity=discord.Game(name='監視中'))
+    await client4.change_presence(activity=discord.Game(name="稼働中"))
 
 @client1.event
 async def on_message(message):#考えろ
@@ -420,6 +425,8 @@ async def on_message(message):
     if message.author.bot:#botはじいてる
         return
     #株システム
+    if mc == "/help":
+        await message.channel.send("**help**\n株\n<#698362068746895442>で数字を入力すると買えます\n<#698359379061243994>で株価を発表します")
     if message.content == "/kabu":
         await message.channel.send(await kabu("get","kabu",message.author.id,0))
     if mc == "/time":
