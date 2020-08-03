@@ -8,7 +8,7 @@ if now[3:] == "00":
         now = datetime.datetime.now().strftime("%H:%M")
 import matplotlib as mpl
 from collections import namedtuple,OrderedDict
-from discord.ext import tasks
+from discord.ext import tasks,commands
 from discord import Webhook, RequestsWebhookAdapter
 import matplotlib as mpl
 mpl.use('Agg')
@@ -21,6 +21,7 @@ client1 = discord.Client()
 client2 = discord.Client()
 client3 = discord.Client()
 client4 = discord.Client()
+ext_client = commands.Bot(command_prefix='/')
 start1 = False
 start2 = False
 start3 = False
@@ -294,6 +295,7 @@ with open('uuid.json') as f:
     uuid = json.load(f)
 @client1.event
 async def on_ready():
+    print('------')
     print('Logged in as')
     print(client2.user.name)
     print(client2.user.id)
@@ -303,8 +305,8 @@ async def on_ready():
     print(client3.user.id)
     print(client4.user.name)
     print(client4.user.id)
-    print(ext_client.user.name)
-    print(ext_client.user.id)
+    #print(ext_client.user.name)
+    #print(ext_client.user.id)
     print('------')
     loop99.start()
     loop98.start()
@@ -771,12 +773,14 @@ discord_bot_token_1 = token["client1"]
 discord_bot_token_2 = token["client2"]
 discord_bot_token_3 = token["client3"]
 discord_bot_token_4 = token["client4"]
+ext_bot_token = token["client1"]
 Entry = namedtuple("Entry", "client event token")
 entries = [
     Entry(client=client1,event=asyncio.Event(),token=discord_bot_token_1),
     Entry(client=client2,event=asyncio.Event(),token=discord_bot_token_2),
     Entry(client=client3,event=asyncio.Event(),token=discord_bot_token_3),
     Entry(client=client4,event=asyncio.Event(),token=discord_bot_token_4),
+    Entry(client=ext_client,event=asyncio.Event(),token=discord_bot_token_1),
 ]  
 
 async def login():
