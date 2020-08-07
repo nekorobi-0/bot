@@ -367,7 +367,7 @@ async def on_message(message):#考えろ
     #ここからログぼ
     if message.channel.id == 717278803893813329:
         old =  txtread(message.author.id)
-        pt1 = random.randint(-10,20)
+        pt1 = random.randint(-20,30)
         msg = f"{message.author.mention}{pt1}ptげっと\n"
         moneyadd(message.author.id,pt1)
         await message.channel.send(f"{msg}{old}->{txtread(message.author.id)}pt")
