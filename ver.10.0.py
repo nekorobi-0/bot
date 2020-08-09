@@ -263,7 +263,6 @@ async def on_ready():
     #print(ext_client.user.id)
     print('------')
     loop99.start()
-    loop98.start()
     global start
     stop =time.time()
     result = stop -start
