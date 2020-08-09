@@ -599,8 +599,6 @@ async def loop99():
                     CHANNEL_ID = 707959412664303616
                     channel = client2.get_channel(CHANNEL_ID)
                     await channel.send(msg)
-            channel = client1.get_channel(730343987906347138)
-            await channel.send(ranking())
         except:
             CHANNEL_ID = 707959412664303616
             channel = client2.get_channel(CHANNEL_ID)
