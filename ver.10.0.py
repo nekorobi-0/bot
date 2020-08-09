@@ -251,7 +251,7 @@ def ranking():
         return text
 with open('uuid.json') as f:
     uuid = json.load(f)
-@client1.event
+@client2.event
 async def on_ready():
     print('------')
     print('Logged in as')
