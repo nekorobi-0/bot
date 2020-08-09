@@ -617,7 +617,7 @@ Entry = namedtuple("Entry", "client event token")
 entries = [
     Entry(client=client2,event=asyncio.Event(),token=discord_bot_token_2),
     Entry(client=client3,event=asyncio.Event(),token=discord_bot_token_3),
-    Entry(client=ext_client,event=asyncio.Event(),token=discord_bot_token_1),
+    Entry(client=ext_client,event=asyncio.Event(),token=ext_bot_token),
 ]  
 
 async def login():
