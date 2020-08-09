@@ -42,6 +42,8 @@ async def reboot():
     webhook.send("再起動、始めました", username='再起動君',avatar_url=webhook_iroioro["avater_reboot"])
     await client2.change_presence(activity=discord.Game(name="停止中"))
     await client3.change_presence(activity=discord.Game(name='停止中'))
+    await client2.close()
+    await client3.close()
 async def kabu(type_type,imput,imput2,imput3):
     #ファイル
     #第２階層
