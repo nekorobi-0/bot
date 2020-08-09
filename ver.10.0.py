@@ -213,6 +213,7 @@ async def kabu(type_type,imput,imput2,imput3):
         #update
         make_glaf()
         channel = client2.get_channel(698359379061243994)
+        await channel.purge()
         await channel.send(file=discord.File("kabuka.png"))
         await channel.send(f"株価{num}椎名")
         await reboot()
