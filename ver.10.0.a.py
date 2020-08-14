@@ -44,7 +44,6 @@ async def reboot():
     await client3.change_presence(activity=discord.Game(name='停止中'))
     await client2.close()
     await client3.close()
-    sys.exit()
 async def kabu(type_type,imput,imput2,imput3):
     #ファイル
     #第２階層
@@ -214,6 +213,7 @@ async def kabu(type_type,imput,imput2,imput3):
         #update
         make_glaf()
         channel = client2.get_channel(698359379061243994)
+        await channel.purge()
         await channel.send(file=discord.File("kabuka.png"))
         await channel.send(f"株価{num}椎名")
         await reboot()
@@ -416,8 +416,6 @@ async def on_message(message):
     global tanni
     if message.author.bot:
         return
-    if message.content == "/reboot":
-        await reboot()
     if message.channel.id == 723872932488675425:
         pass
     elif message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
