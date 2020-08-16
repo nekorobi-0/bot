@@ -601,6 +601,7 @@ async def loop99():
                 if kaisuu == 7:
                     CHANNEL_ID = 707959412664303616
                     channel = client2.get_channel(CHANNEL_ID)
+                    await channel.purge()
                     await channel.send(msg)
         except:
             CHANNEL_ID = 707959412664303616
