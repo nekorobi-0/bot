@@ -6,7 +6,6 @@ if now[3:] == "00":
     while now[3:] == "00":
         time.sleep(1)
         now = datetime.datetime.now().strftime("%H:%M")
-import matplotlib as mpl
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks,commands
 from discord import Webhook, RequestsWebhookAdapter
