@@ -2,10 +2,6 @@ import time
 start = time.time()
 import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
 now = datetime.datetime.now().strftime("%H:%M")
-if now[3:] == "00":
-    while now[3:] == "00":
-        time.sleep(1)
-        now = datetime.datetime.now().strftime("%H:%M")
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks,commands
 from discord import Webhook, RequestsWebhookAdapter
@@ -157,6 +153,7 @@ async def kabu(type_type,imput,imput2,imput3):
                     f.writelines(l)
     def make_glaf():
         #make_glaf
+        plt.figure()
         with open("kabuka.txt", encoding="cp932") as f:
             data = f.read()
         x = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
@@ -215,8 +212,6 @@ async def kabu(type_type,imput,imput2,imput3):
         await channel.purge()
         await channel.send(file=discord.File("kabuka.png"))
         await channel.send(f"株価{num}椎名")
-        await reboot()
-        sys.exit()
     elif type_type == "get":
         #get
         if imput == "kabuka":
