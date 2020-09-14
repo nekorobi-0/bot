@@ -440,6 +440,12 @@ async def on_message(message):
     global tanni
     if message.author.bot:
         return
+    if message.content == "/bot info":
+        embed = discord.Embed(title="サーバー止まるなよ!", description="", color=0xff0000)
+        embed.add_field(name="cpu", value=f"`{psutil.cpu_percent(interval=1)}%`", inline=False)
+        embed.add_field(name="ram", value=f"`{psutil.virtual_memory().percent}%`", inline=False)
+        embed.add_field(name="disk", value=f"`{psutil.disk_usage('/').percent}%`", inline=False)
+        await message.channel.send(embed=embed)
     if message.channel.id == 723872932488675425:
         pass
     elif message.channel.category_id == 721478471712374811 and message.channel.id == 721479071833522296:
