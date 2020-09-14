@@ -1,6 +1,6 @@
 import time
 start = time.time()
-import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json
+import discord,requests,re,bs4,datetime,asyncio,json,random,sys,requests,json,psutil
 now = datetime.datetime.now().strftime("%H:%M")
 from collections import namedtuple,OrderedDict
 from discord.ext import tasks,commands
