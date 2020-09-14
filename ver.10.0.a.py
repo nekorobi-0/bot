@@ -392,9 +392,39 @@ async def on_message(message):
         await message.channel.send("再起動します")
         await reboot()
         sys.exit()
+    if message.content == "/bot info":
+        embed = discord.Embed(title="サーバー止まるなよ!", description="", color=0xff0000)
+        embed.add_field(name="cpu", value=f"`{psutil.cpu_percent(interval=1)}%`", inline=False)
+        embed.add_field(name="ram", value=f"`{psutil.virtual_memory().percent}%`", inline=False)
+        embed.add_field(name="disk", value=f"`{psutil.disk_usage('/').percent}%`", inline=False)
+        await message.channel.send(embed=embed)
 
 @client3.event#ばいばい
 async def on_message(message):
+    if message.content in "https://ptb.discordapp.com/channels/":
+        embeds = []
+        msg_id = message.content.split("/")
+        print(len(msg_id))
+        ch = client3.get_channel(msg_id[1])
+        msg = await ch.fetch_message(msg_id[2])
+        try:
+            for r in msg.reactions:
+                reaction += f"{r} | **{r.count} 回**"
+            embed = discord.Embed(title="",
+                description=message.content, color=0x00bfff)
+            embed.set_author(name=message.author.display_name, 
+                icon_url=message.author.avatar_url_as(format="png"))
+            embed.set_footer(text=f"{message.guild.name} / {message.channel.name}",
+                icon_url=message.guild.icon_url_as(format="png"))
+            embed.add_field(name="リアクション", value=reaction, inline=True)
+            embeds.append(embed)
+        except:
+            pass
+        try:
+            embeds.append(msg.embeds)
+        except:
+            pass
+        await message.channel.send(embed=embeds)
     global start1
     global start2
     global start3
